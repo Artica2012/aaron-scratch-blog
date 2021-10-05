@@ -97,7 +97,6 @@ def admin_only(f):
     return decorated_function
 
 
-
 @app.route('/')
 def get_all_posts():
     posts = BlogPost.query.all()
@@ -137,6 +136,9 @@ def login():
         try:
             if check_password_hash(user.password, form.password.data):
                 login_user(user)
+                if user.id == 1:
+                    user.admin = 1;
+                    db.session.commit()
                 return redirect(url_for('get_all_posts'))
         except AttributeError:
             flash("Unregistered Email")
